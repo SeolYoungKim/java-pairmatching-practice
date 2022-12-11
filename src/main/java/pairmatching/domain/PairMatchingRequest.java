@@ -24,14 +24,6 @@ public class PairMatchingRequest {
         return course;
     }
 
-    public Level level() {
-        return level;
-    }
-
-    public Mission mission() {
-        return mission;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
