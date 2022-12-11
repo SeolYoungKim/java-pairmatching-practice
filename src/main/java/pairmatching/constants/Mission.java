@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum Mission {
-    RACING(Level.LEVEL1, "자동차 경주"),
+    RACING(Level.LEVEL1, "자동차경주"),
     LOTTO(Level.LEVEL1, "로또"),
     NUMBER_BASEBALL(Level.LEVEL1, "숫자야구게임"),
     PERFORMANCE_IMPROVEMENT(Level.LEVEL4, "성능개선"),
