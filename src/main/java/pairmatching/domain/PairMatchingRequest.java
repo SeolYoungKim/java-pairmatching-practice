@@ -16,8 +16,12 @@ public class PairMatchingRequest {
         this.mission = dto.mission();
     }
 
+    public boolean isSameCourse(PairMatchingRequest other) {
+        return this.course.equals(other.course);
+    }
+
     public boolean isSameLevel(PairMatchingRequest other) {
-        return this.level.equals(other.level);
+        return this.level == other.level;
     }
 
     public String course() {

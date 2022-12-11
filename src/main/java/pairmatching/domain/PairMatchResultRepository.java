@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PairMatchResultRepository {
     private final Map<PairMatchingRequest, PairMatchResult> matchingResults = new HashMap<>();
@@ -14,8 +15,7 @@ public class PairMatchResultRepository {
     }
 
     public boolean hasSameLevelResult(PairMatchingRequest pairMatchingRequest) {
-        return matchingResults.keySet().stream()
-                .filter(request -> !request.equals(pairMatchingRequest))
+        return notEqualsButSameCourse(pairMatchingRequest)
                 .anyMatch(request -> request.isSameLevel(pairMatchingRequest));
     }
 
@@ -25,11 +25,17 @@ public class PairMatchResultRepository {
     }
 
     public List<PairMatchResult> findSameLevelResult(PairMatchingRequest pairMatchingRequest) {
-        return matchingResults.keySet().stream()
-                .filter(request -> !request.equals(pairMatchingRequest))
+        return notEqualsButSameCourse(pairMatchingRequest)
                 .filter(request -> request.isSameLevel(pairMatchingRequest))
                 .map(matchingResults::get)
                 .collect(Collectors.toList());
+    }
+
+    private Stream<PairMatchingRequest> notEqualsButSameCourse(
+            PairMatchingRequest pairMatchingRequest) {
+        return matchingResults.keySet().stream()
+                .filter(request -> !request.equals(pairMatchingRequest))
+                .filter(request -> request.isSameCourse(pairMatchingRequest));
     }
 
     public void deleteAll() {
