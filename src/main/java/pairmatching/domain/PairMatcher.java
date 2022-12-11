@@ -1,6 +1,5 @@
 package pairmatching.domain;
 
-import camp.nextstep.edu.missionutils.Randoms;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,42 +16,38 @@ public class PairMatcher {
 
     public Optional<PairMatchResult> pairMatchResult(PairMatchingRequest pairMatchingRequest,
             boolean wantRematch) {
-        // 중복된 조회인 경우, 되돌리고 재선택할건지 물어봐야 함 -> 재매칭!!
         if (pairMatchResultRepository.hasDuplicatedResult(pairMatchingRequest) && !wantRematch) {
             return Optional.empty();
         }
 
-        List<Crew> crews = crewRepository.findByCourse(pairMatchingRequest.course());
-
-        PairMatchResult pairMatchResult = pairMatch(pairMatchingRequest, crews);
+        PairMatchResult pairMatchResult = pairMatch(pairMatchingRequest);
         return pairMatchResultRepository.save(pairMatchingRequest, pairMatchResult);
     }
 
-    private PairMatchResult pairMatch(PairMatchingRequest request, List<Crew> crews) {
+    private PairMatchResult pairMatch(PairMatchingRequest request) {
         if (pairMatchResultRepository.hasSameLevelResult(request)) {
-            return pairMatchOfSameLevel(request, crews);
+            return pairMatchOfSameLevel(request);
         }
 
-        List<List<Crew>> results = matchResult(crews);
-
+        List<List<Crew>> results = matchResult(request);
         return new PairMatchResult(results);
     }
 
-    private PairMatchResult pairMatchOfSameLevel(PairMatchingRequest request, List<Crew> crews) {
-        List<List<Crew>> results = matchResult(crews);
+    private PairMatchResult pairMatchOfSameLevel(PairMatchingRequest request) {
+        List<List<Crew>> results = matchResult(request);
         PairMatchResult pairMatchResult = new PairMatchResult(results);
 
         List<PairMatchResult> sameLevelResults = pairMatchResultRepository.findSameLevelResult(request);
-        pairMatchResult = rematchOrNot(crews, pairMatchResult, sameLevelResults);
+        pairMatchResult = rematchOrNot(request, pairMatchResult, sameLevelResults);
 
         return pairMatchResult;
     }
 
-    private PairMatchResult rematchOrNot(List<Crew> crews,
+    private PairMatchResult rematchOrNot(PairMatchingRequest request,
             PairMatchResult pairMatchResult, List<PairMatchResult> sameLevelResults) {
         int rematchCount = 0;
         while (pairMatchResult.hasAlreadyMatchedInSameLevel(sameLevelResults)) {
-            pairMatchResult = new PairMatchResult(matchResult(crews));
+            pairMatchResult = new PairMatchResult(matchResult(request));
             rematchCount++;
 
             if (rematchCount > 3) {
@@ -62,8 +57,8 @@ public class PairMatcher {
         return pairMatchResult;
     }
 
-    private static List<List<Crew>> matchResult(List<Crew> crews) {
-        List<Crew> shuffledList = Randoms.shuffle(crews);
+    private List<List<Crew>> matchResult(PairMatchingRequest request) {
+        List<Crew> shuffledList = crewRepository.shuffledCrews(request.course());
 
         List<List<Crew>> results = new ArrayList<>();
         int size = shuffledList.size();
@@ -79,5 +74,9 @@ public class PairMatcher {
 
     public void clear() {
         pairMatchResultRepository.deleteAll();
+    }
+
+    public Optional<PairMatchResult> findBy(PairMatchingRequest request) {
+        return pairMatchResultRepository.findByRequest(request);
     }
 }

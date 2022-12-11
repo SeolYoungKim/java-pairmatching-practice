@@ -1,5 +1,7 @@
 package pairmatching.domain;
 
+import camp.nextstep.edu.missionutils.Randoms;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,9 +12,10 @@ public class CrewRepository {
         this.crewNameFileReader = crewNameFileReader;
     }
 
-    public List<Crew> findByCourse(String course) {
+    public List<Crew> shuffledCrews(String course) {
         List<String> crewNames = crewNameFileReader.readFileBy(course);
-        return crewNames.stream()
+        List<String> shuffledNames = new ArrayList<>(Randoms.shuffle(crewNames));
+        return shuffledNames.stream()
                 .map(Crew::new)
                 .collect(Collectors.toList());
     }
