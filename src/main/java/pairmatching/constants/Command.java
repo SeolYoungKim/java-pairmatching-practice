@@ -5,12 +5,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum Command {
+    NOTHING("Nothing"),
     MATCHING("1"),
     READ("2"),
     INITIALIZATION("3"),
     QUIT("Q"),;
 
     private static final Map<String, Command> VALUE_TO_COMMAND = Arrays.stream(values())
+            .filter(command -> command != NOTHING)
             .collect(Collectors.toUnmodifiableMap(
                     command -> command.value,
                     command -> command
@@ -28,5 +30,21 @@ public enum Command {
 
     Command(String value) {
         this.value = value;
+    }
+
+    public boolean isMatching() {
+        return this == MATCHING;
+    }
+
+    public boolean isRead() {
+        return this == READ;
+    }
+
+    public boolean isInitialization() {
+        return this == INITIALIZATION;
+    }
+
+    public boolean isQuit() {
+        return this == QUIT;
     }
 }

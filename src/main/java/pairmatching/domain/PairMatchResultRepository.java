@@ -20,7 +20,8 @@ public class PairMatchResultRepository {
     }
 
     public Optional<PairMatchResult> save(PairMatchingRequest request, PairMatchResult result) {
-        return Optional.ofNullable(matchingResults.put(request, result));
+        matchingResults.put(request, result);
+        return Optional.of(result);
     }
 
     public List<PairMatchResult> findSameLevelResult(PairMatchingRequest pairMatchingRequest) {
@@ -29,5 +30,9 @@ public class PairMatchResultRepository {
                 .filter(request -> request.isSameLevel(pairMatchingRequest))
                 .map(matchingResults::get)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteAll() {
+        matchingResults.clear();
     }
 }

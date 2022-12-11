@@ -1,5 +1,6 @@
 package pairmatching.domain;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,5 +23,9 @@ public class PairMatchResult {
         return matchResult.stream()
                 .map(crews -> crews.stream().sorted().collect(Collectors.toList()))
                 .collect(Collectors.toList());
+    }
+
+    public List<List<Crew>> matchResult() {
+        return Collections.unmodifiableList(matchResult);
     }
 }

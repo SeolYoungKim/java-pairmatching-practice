@@ -3,16 +3,17 @@ package pairmatching.domain;
 import java.util.Objects;
 import pairmatching.constants.Level;
 import pairmatching.constants.Mission;
+import pairmatching.dto.PairMatchingRequestDto;
 
 public class PairMatchingRequest {
     private final String course;
     private final Level level;
     private final Mission mission;
 
-    public PairMatchingRequest(String course, Level level, Mission mission) {
-        this.course = course;
-        this.level = level;
-        this.mission = mission;
+    public PairMatchingRequest(PairMatchingRequestDto dto) {
+        this.course = dto.course();
+        this.level = dto.level();
+        this.mission = dto.mission();
     }
 
     public boolean isSameLevel(PairMatchingRequest other) {

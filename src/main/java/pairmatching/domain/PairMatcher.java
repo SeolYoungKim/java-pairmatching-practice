@@ -15,9 +15,10 @@ public class PairMatcher {
         this.pairMatchResultRepository = pairMatchResultRepository;
     }
 
-    public Optional<PairMatchResult> pairMatchResult(PairMatchingRequest pairMatchingRequest) {
+    public Optional<PairMatchResult> pairMatchResult(PairMatchingRequest pairMatchingRequest,
+            boolean wantRematch) {
         // 중복된 조회인 경우, 되돌리고 재선택할건지 물어봐야 함 -> 재매칭!!
-        if (pairMatchResultRepository.hasDuplicatedResult(pairMatchingRequest)) {
+        if (pairMatchResultRepository.hasDuplicatedResult(pairMatchingRequest) && !wantRematch) {
             return Optional.empty();
         }
 
@@ -74,5 +75,9 @@ public class PairMatcher {
             results.get(results.size() - 1).add(shuffledList.get(size - 1));
         }
         return results;
+    }
+
+    public void clear() {
+        pairMatchResultRepository.deleteAll();
     }
 }
