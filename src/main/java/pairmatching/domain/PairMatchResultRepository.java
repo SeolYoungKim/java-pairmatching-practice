@@ -35,4 +35,8 @@ public class PairMatchResultRepository {
     public void deleteAll() {
         matchingResults.clear();
     }
+
+    public Optional<PairMatchResult> findByRequest(PairMatchingRequest request) {
+        return Optional.ofNullable(matchingResults.get(request));
+    }
 }

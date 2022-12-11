@@ -30,4 +30,8 @@ public class OutputView {
         System.out.println("페어 매칭 결과입니다.");
         System.out.println(string);
     }
+
+    public void printNoResultMessage() {
+        System.out.println("해당되는 페어 매칭 결과가 없습니다.");
+    }
 }
