@@ -26,12 +26,10 @@ public class PairMachingMachine {
             command = inputView.selectFunction();
             if (command.isMatching()) {
                 pairMatching();
-                continue;
             }
 
             if (command.isRead()) {
                 readPair();
-                continue;
             }
 
             if (command.isInitialization()) {
@@ -57,9 +55,7 @@ public class PairMachingMachine {
                     continue;
                 }
 
-                if (rematching.equals("아니오")) {
-                    continue outer;
-                }
+                continue outer;
             }
 
             break;
@@ -72,7 +68,6 @@ public class PairMachingMachine {
     private void readPair() {
         outputView.printMenu();
         PairMatchingRequest request = new PairMatchingRequest(inputView.selectCondition());
-
         Optional<PairMatchResult> result = pairMatcher.findBy(request);
         if (result.isEmpty()) {
             outputView.printNoResultMessage();

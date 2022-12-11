@@ -13,11 +13,14 @@ public class Application {
         PairMachingMachine pairMachingMachine = new PairMachingMachine(
                 new InputView(),
                 new OutputView(),
-                new PairMatcher(
-                        new CrewRepository(new CrewNameFileReader()),
-                        new PairMatchResultRepository())
-        );
+                pairMatcher());
 
         pairMachingMachine.run();
+    }
+
+    private static PairMatcher pairMatcher() {
+        CrewRepository crewRepository = new CrewRepository(new CrewNameFileReader());
+        PairMatchResultRepository pairMatchResultRepository = new PairMatchResultRepository();
+        return new PairMatcher(crewRepository, pairMatchResultRepository);
     }
 }
