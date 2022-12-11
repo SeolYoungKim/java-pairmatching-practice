@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CommandTest {
-
     @DisplayName("정의되지 않은 값을 찾는 경우 예외를 발생시킨다.")
     @Test
     void ofFail1() {
